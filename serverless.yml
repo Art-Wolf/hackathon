@@ -1,5 +1,5 @@
 service:
-  name: alexa-template
+  name: fifa-ref 
 
 plugins:
   - serverless-webpack
@@ -13,8 +13,7 @@ provider:
   name: aws
   stage: ${opt:stage, 'local'}
   runtime: nodejs6.10
-  profile: alexa-template-alexa-skill
-  region: us-east-1
+  region: us-west-2
   environment: ${file(./env.yaml):${opt:stage, self:provider.stage}}
 
 functions:
