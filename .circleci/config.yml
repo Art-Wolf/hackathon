@@ -8,8 +8,12 @@ lambda_publish: &lambda_publish
     - image: wilson208/circleci-awscli
   working_directory: ~/repo
   steps:
-    - checkout
-
+    - run:
+        name: Configure alexa id
+        command: |
+            cat "${SERVERLESS_RELEASE_CHANNEL}:" > env.yaml
+            cat "  NODE_ENV: ${SERVERLESS_RELEASE_CHANNEL}" >> env.yaml
+            cat "  alexa_app_id: ${ALEXA_APP_ID}" >> env.yaml
     - run:
         name: Install Serverless CLI and dependencies
         command: |
