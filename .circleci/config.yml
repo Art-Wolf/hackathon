@@ -1,0 +1,82 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+lambda_publish: &lambda_publish
+  docker:
+    - image: wilson208/circleci-awscli
+  working_directory: ~/repo
+  steps:
+    - checkout
+
+    - run:
+        name: Install Serverless CLI and dependencies
+        command: |
+            npm install
+    - run:
+        name: Publish to AWS
+        command: |
+            sls deploy --stage $SERVERLESS_RELEASE_CHANNEL
+jobs:
+  test_lambda:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: yarn test
+
+  publish_to_aws_dev:
+    environment:
+      SERVERLESS_RELEASE_CHANNEL: dev
+    <<: *lambda_publish
+
+  publish_to_aws_prod:
+    environment:
+      SERVERLESS_RELEASE_CHANNEL: prod
+    <<: *lambda_publish
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - test_lambda
+
+      - publish_to_aws_dev:
+          requires:
+            - test_lambda
+          filters:
+            branches:
+              only: development
+
+      - publish_to_aws_prod:
+          requires:
+            - test_lambda
+          filters:
+            branches:
+              only: release

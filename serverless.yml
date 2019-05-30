@@ -1,0 +1,24 @@
+service:
+  name: alexa-template
+
+plugins:
+  - serverless-webpack
+  - serverless-sentry
+
+custom:
+  sentry:
+    dsn: https://a91d8b5be4d0486da4182c46e6888911@sentry.io/1471183
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'local'}
+  runtime: nodejs6.10
+  profile: alexa-template-alexa-skill
+  region: us-east-1
+  environment: ${file(./env.yaml):${opt:stage, self:provider.stage}}
+
+functions:
+  alexa:
+    handler: src/alexa.handler
+    events:
+      - alexaSkill

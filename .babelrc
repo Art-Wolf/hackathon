@@ -1,0 +1,17 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "6.10"
+        }
+      }
+    ],
+    "es2017"
+  ],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-runtime"
+  ]
+}
