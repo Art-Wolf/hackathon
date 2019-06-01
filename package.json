@@ -32,7 +32,7 @@
   "homepage": "https://github.com/Art-Wolf/hackathon#readme",
   "dependencies": {
     "alexa-sdk": "^1.0.25",
-    "aws-sdk": "^2.196.0",
+    "aws-sdk": "^2.466.0",
     "cheerio": "^1.0.0-rc.3",
     "install": "^0.12.2",
     "lodash": "^4.17.5",

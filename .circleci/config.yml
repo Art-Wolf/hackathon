@@ -16,7 +16,7 @@ lambda_publish: &lambda_publish
             echo "${SERVERLESS_RELEASE_CHANNEL}:" > env.yaml
             echo "  NODE_ENV: ${SERVERLESS_RELEASE_CHANNEL}" >> env.yaml
             echo "  alexa_app_id: ${ALEXA_APP_ID}" >> env.yaml
-            echo "  SOCCER_TEAM_TABLE: fifahackathon-soccer-${SERVERLESS_RELEASE_CHANNEL}" >> end.yaml
+            echo "  SOCCER_TEAM_TABLE: fifahackathon-soccer-${SERVERLESS_RELEASE_CHANNEL}" >> env.yaml
     - run:
         name: Install Serverless CLI and dependencies
         command: |

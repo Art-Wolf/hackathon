@@ -1,10 +1,12 @@
 var request = require ('request');
 var cheerio = require ('cheerio');
 var getUuid = require ('uuid-by-string');
+// Load the AWS SDK for Node.js
+var AWS = require ('aws-sdk');
+// Set the region
+AWS.config.update ({region: 'us-west-2'});
 
 module.exports.handler = (event, context) => {
-  let playerList = [];
-
   request ('https://www.ussoccer.com/teams/uswnt', function (err, resp, html) {
     if (!err) {
       const $ = cheerio.load (html);
@@ -48,9 +50,41 @@ module.exports.handler = (event, context) => {
             '-' +
             player['lastName']
         );
-        playerList.push (player);
+
+        var ddb = new AWS.DynamoDB ({apiVersion: '2012-08-10'});
+
+        var params = {
+          TableName: process.env.SOCCER_TEAM_TABLE,
+          Item: {
+            id: {S: player['id']},
+            team: {S: player['team']},
+            number: {S: player['number']},
+            firstName: {S: player['firstName']},
+            lastName: {S: player['lastName']},
+            bio: {S: player['bio']},
+            Appearances: {
+              S: player['Appearances'] ? player['Appearances'] : '0',
+            },
+            Goals: {S: player['Goals'] ? player['Goals'] : '0'},
+            Assists: {S: player['Assists'] ? player['Assists'] : '0'},
+            'World Cups': {
+              S: player['World Cups'] ? player['World Cups'] : '0',
+            },
+            CleanSheets: {
+              S: player['CleanSheets'] ? player['CleanSheets'] : '0',
+            },
+          },
+        };
+
+        // Call DynamoDB to add the item to the table
+        ddb.putItem (params, function (err, data) {
+          if (err) {
+            console.log ('Error', err);
+          } else {
+            console.log ('Success', data);
+          }
+        });
       });
     }
-    console.log (playerList);
   });
 };
