@@ -33,10 +33,16 @@
   "dependencies": {
     "alexa-sdk": "^1.0.25",
     "aws-sdk": "^2.196.0",
+    "cheerio": "^1.0.0-rc.3",
+    "install": "^0.12.2",
     "lodash": "^4.17.5",
     "node-fetch": "^1.7.3",
+    "node-html-parser": "^1.1.15",
+    "npm": "^6.9.0",
     "raven": "^2.4.2",
-    "serverless-sentry-lib": "^1.0.0"
+    "request": "^2.88.0",
+    "serverless-sentry-lib": "^1.0.0",
+    "uuid-by-string": "^2.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

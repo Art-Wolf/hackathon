@@ -20,4 +20,28 @@ functions:
   alexa:
     handler: src/alexa.handler
     events:
-      - alexaSkill
+      - alexaSkill: ${opt:alexaskillid}
+  parser:
+    handler: src/parser.handler
+    timeout: 60
+    events:
+      - schedule: rate(1 day)
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+        TableName: ${self:provider.environment.SOCCER_TEAM_TABLE}

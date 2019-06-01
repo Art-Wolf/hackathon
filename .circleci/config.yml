@@ -16,6 +16,7 @@ lambda_publish: &lambda_publish
             echo "${SERVERLESS_RELEASE_CHANNEL}:" > env.yaml
             echo "  NODE_ENV: ${SERVERLESS_RELEASE_CHANNEL}" >> env.yaml
             echo "  alexa_app_id: ${ALEXA_APP_ID}" >> env.yaml
+            echo "  SOCCER_TEAM_TABLE: fifahackathon-soccer-${SERVERLESS_RELEASE_CHANNEL}" >> end.yaml
     - run:
         name: Install Serverless CLI and dependencies
         command: |
@@ -23,7 +24,7 @@ lambda_publish: &lambda_publish
     - run:
         name: Publish to AWS
         command: |
-            sls deploy --stage $SERVERLESS_RELEASE_CHANNEL
+            sls deploy --stage $SERVERLESS_RELEASE_CHANNEL --alexaskillid ${ALEXA_APP_ID}
 jobs:
   test_lambda:
     docker:
