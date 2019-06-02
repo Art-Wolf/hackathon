@@ -100,15 +100,55 @@ module.exports.full = (event, context) => {
     if (data != null) {
       for (let index = 0; index < data.Items.length; index++) {
         const element = data.Items[index];
-        count++;
-        console.log (
-          'TOTAL::> ' +
-            count +
-            ' ITEM::> ' +
-            index +
-            ' DATA:: ' +
-            JSON.stringify (element)
-        );
+        let playerUrl = 'https://www.ussoccer.com/teams/uswnt' + element['bio'];
+
+        request (playerUrl, function (err, resp, html) {
+          if (!err) {
+            const $ = cheerio.load (html);
+
+            let player = {};
+
+            player['id'] = element['id'];
+
+            $ ('.P1Player-module__textColumn--24s4m')
+              .find ('li')
+              .each (function (i, elem) {
+                let playerRawInfo = $ (this).text ().split (' ');
+
+                if (playerRawInfo[0] != 'Date') {
+                  player[playerRawInfo[0]] = playerRawInfo
+                    .slice (1, playerRawInfo.length + 1)
+                    .join (' ');
+                } else {
+                  player['dob'] = playerRawInfo
+                    .slice (3, playerRawInfo.length + 1)
+                    .join (' ');
+                }
+              });
+
+            var ddb = new AWS.DynamoDB ({apiVersion: '2012-08-10'});
+
+            var params = {
+              TableName: process.env.SOCCER_TEAM_TABLE,
+              Item: {
+                id: {S: player['id']},
+                dob: {S: player['dob']},
+                hometown: {S: player['Hometown']},
+                height: {S: player['Height']},
+                club: {S: player['Club']},
+              },
+            };
+
+            // Call DynamoDB to add the item to the table
+            ddb.putItem (params, function (err, data) {
+              if (err) {
+                console.log ('Error', err);
+              } else {
+                console.log ('Success', data);
+              }
+            });
+          }
+        });
       }
     }
   });
