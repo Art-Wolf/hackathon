@@ -90,7 +90,7 @@ module.exports.handler = (event, context) => {
 };
 
 module.exports.full = (event, context) => {
-  const documentClient = new AWS.DynamoDB.DocumentClient ();
+  const docClient = new AWS.DynamoDB.DocumentClient ();
   var params = {
     TableName: process.env.SOCCER_TEAM_TABLE,
   };
