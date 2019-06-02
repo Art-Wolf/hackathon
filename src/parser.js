@@ -100,6 +100,8 @@ module.exports.full = (event, context) => {
     if (data != null) {
       for (let index = 0; index < data.Items.length; index++) {
         const element = data.Items[index];
+        console.log ('Data: ' + element);
+
         let playerUrl = 'https://www.ussoccer.com/teams/uswnt' + element['bio'];
 
         request (playerUrl, function (err, resp, html) {
@@ -132,12 +134,14 @@ module.exports.full = (event, context) => {
               TableName: process.env.SOCCER_TEAM_TABLE,
               Item: {
                 id: {S: player['id']},
-                dob: {S: player['dob']},
-                hometown: {S: player['Hometown']},
-                height: {S: player['Height']},
-                club: {S: player['Club']},
+                dob: {S: player['dob'] ? player['dob'] : ''},
+                hometown: {S: player['Hometown'] ? player['Hometown'] : ''},
+                height: {S: player['Height'] ? player['Height'] : ''},
+                club: {S: player['Club'] ? player['Club'] : ''},
               },
             };
+
+            console.log (params);
 
             // Call DynamoDB to add the item to the table
             ddb.putItem (params, function (err, data) {
