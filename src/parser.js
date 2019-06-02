@@ -100,9 +100,10 @@ module.exports.full = (event, context) => {
     if (data != null) {
       for (let index = 0; index < data.Items.length; index++) {
         const element = data.Items[index];
-        console.log ('Data: ' + element);
+        console.log ('ID: ' + element['id']);
+        console.log ('Bio: ' + element['bio']);
 
-        let playerUrl = 'https://www.ussoccer.com/teams/uswnt' + element['bio'];
+        let playerUrl = 'https://www.ussoccer.com' + element['bio'];
 
         request (playerUrl, function (err, resp, html) {
           if (!err) {
@@ -111,46 +112,63 @@ module.exports.full = (event, context) => {
             $ ('.P1Player-module__textColumn--24s4m')
               .find ('li')
               .each (function (i, elem) {
-                let player = {};
-
-                player['id'] = element['id'];
-
                 let playerRawInfo = $ (this).text ().split (' ');
 
-                if (playerRawInfo[0] != 'Date') {
-                  player[playerRawInfo[0]] = playerRawInfo
+                console.log ('Inside li: ' + playerRawInfo);
+
+                let saveCheck = false;
+
+                let updateExpression = 'set ';
+                let expressionAttributeValues = {};
+
+                if (
+                  playerRawInfo[0] != 'Date' &&
+                  playerRawInfo[0] != 'Position' &&
+                  playerRawInfo[0] != 'Number'
+                ) {
+                  let playerValue = playerRawInfo
                     .slice (1, playerRawInfo.length + 1)
                     .join (' ');
-                } else {
-                  player['dob'] = playerRawInfo
+
+                  updateExpression += playerRawInfo[0].toLowerCase () + ' = :a';
+                  expressionAttributeValues[':a'] = playerValue;
+
+                  saveCheck = true;
+                } else if (playerRawInfo[0] === 'Date') {
+                  let playerValue = playerRawInfo
                     .slice (3, playerRawInfo.length + 1)
                     .join (' ');
+
+                  updateExpression += ' dob = :a';
+                  expressionAttributeValues[':a'] = playerValue;
+                  saveCheck = true;
                 }
 
-                var ddb = new AWS.DynamoDB ({apiVersion: '2012-08-10'});
+                if (saveCheck) {
+                  const docClient2 = new AWS.DynamoDB.DocumentClient ();
+                  var params = {
+                    TableName: process.env.SOCCER_TEAM_TABLE,
+                    Key: {id: element['id']},
+                    UpdateExpression: updateExpression,
+                    ExpressionAttributeValues: expressionAttributeValues,
+                    ReturnValues: 'UPDATED_NEW',
+                  };
 
-                var params = {
-                  TableName: process.env.SOCCER_TEAM_TABLE,
-                  Item: {
-                    id: {S: player['id']},
-                    dob: {S: player['dob'] ? player['dob'] : ''},
-                    hometown: {S: player['Hometown'] ? player['Hometown'] : ''},
-                    height: {S: player['Height'] ? player['Height'] : ''},
-                    club: {S: player['Club'] ? player['Club'] : ''},
-                  },
-                };
+                  console.log (params);
 
-                console.log (params);
-
-                // Call DynamoDB to add the item to the table
-                ddb.putItem (params, function (err, data) {
-                  if (err) {
-                    console.log ('Error', err);
-                  } else {
-                    console.log ('Success', data);
-                  }
-                });
+                  // Call DynamoDB to add the item to the table
+                  docClient2.update (params, function (err, data) {
+                    if (err) {
+                      console.log ('Error', err);
+                    } else {
+                      console.log ('Success', data);
+                    }
+                  });
+                }
               });
+          } else {
+            console.log ('Error');
+            console.log (err);
           }
         });
       }
