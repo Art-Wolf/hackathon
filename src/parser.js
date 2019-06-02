@@ -108,13 +108,13 @@ module.exports.full = (event, context) => {
           if (!err) {
             const $ = cheerio.load (html);
 
-            let player = {};
-
-            player['id'] = element['id'];
-
             $ ('.P1Player-module__textColumn--24s4m')
               .find ('li')
               .each (function (i, elem) {
+                let player = {};
+
+                player['id'] = element['id'];
+
                 let playerRawInfo = $ (this).text ().split (' ');
 
                 if (playerRawInfo[0] != 'Date') {
@@ -126,31 +126,31 @@ module.exports.full = (event, context) => {
                     .slice (3, playerRawInfo.length + 1)
                     .join (' ');
                 }
+
+                var ddb = new AWS.DynamoDB ({apiVersion: '2012-08-10'});
+
+                var params = {
+                  TableName: process.env.SOCCER_TEAM_TABLE,
+                  Item: {
+                    id: {S: player['id']},
+                    dob: {S: player['dob'] ? player['dob'] : ''},
+                    hometown: {S: player['Hometown'] ? player['Hometown'] : ''},
+                    height: {S: player['Height'] ? player['Height'] : ''},
+                    club: {S: player['Club'] ? player['Club'] : ''},
+                  },
+                };
+
+                console.log (params);
+
+                // Call DynamoDB to add the item to the table
+                ddb.putItem (params, function (err, data) {
+                  if (err) {
+                    console.log ('Error', err);
+                  } else {
+                    console.log ('Success', data);
+                  }
+                });
               });
-
-            var ddb = new AWS.DynamoDB ({apiVersion: '2012-08-10'});
-
-            var params = {
-              TableName: process.env.SOCCER_TEAM_TABLE,
-              Item: {
-                id: {S: player['id']},
-                dob: {S: player['dob'] ? player['dob'] : ''},
-                hometown: {S: player['Hometown'] ? player['Hometown'] : ''},
-                height: {S: player['Height'] ? player['Height'] : ''},
-                club: {S: player['Club'] ? player['Club'] : ''},
-              },
-            };
-
-            console.log (params);
-
-            // Call DynamoDB to add the item to the table
-            ddb.putItem (params, function (err, data) {
-              if (err) {
-                console.log ('Error', err);
-              } else {
-                console.log ('Success', data);
-              }
-            });
           }
         });
       }
