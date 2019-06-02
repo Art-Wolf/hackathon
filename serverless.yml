@@ -36,6 +36,11 @@ functions:
     timeout: 60
     events:
       - schedule: rate(1 day)
+  parserFull:
+    handler: src/parser.full
+    timeout: 60
+    events:
+      - schedule: rate(1 day)
 
 resources:
   Resources:
