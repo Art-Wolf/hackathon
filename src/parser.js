@@ -88,3 +88,28 @@ module.exports.handler = (event, context) => {
     }
   });
 };
+
+module.exports.full = (event, context) => {
+  const documentClient = new AWS.DynamoDB.DocumentClient ();
+  var params = {
+    TableName: process.env.SOCCER_TEAM_TABLE,
+  };
+  var count = 0;
+
+  docClient.scan (params).eachPage ((err, data, done) => {
+    if (data != null) {
+      for (let index = 0; index < data.Items.length; index++) {
+        const element = data.Items[index];
+        count++;
+        console.log (
+          'TOTAL::> ' +
+            count +
+            ' ITEM::> ' +
+            index +
+            ' DATA:: ' +
+            JSON.stringify (element)
+        );
+      }
+    }
+  });
+};
