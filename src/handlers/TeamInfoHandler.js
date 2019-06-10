@@ -51,8 +51,9 @@ export default class FifaRefHandler {
         data.Items.forEach(function (player) {
           const say = player.firstName + ' ' +
             player.lastName + ' plays as ' +
-            player.number + ' for ' +
-            player.team;
+            player.number + ' for Team USA. Her local team is ' +
+            player.team + '. She was born ' +
+            player.dob + ' and her home town is ' + player.hometown;
 
           this.alexa.emit(':tell', say);
         });
