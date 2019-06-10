@@ -23,4 +23,4 @@ To automate the retrieval of additional information not maintained by FIFA, we s
 
 The AWS Lambda is not skill id locked, this allows testers to setup a private Alexa skill, build a model with the provided interaction model, and call the lambda via the testing tab.
 
-(Testing Instructions)[./Alexa_Setup.md]
+[Testing Instructions](./Alexa_Setup.md)
