@@ -26,8 +26,11 @@ export default class ClubInfoHandler {
   getClubInfo() {
     var params = {
       TableName: process.env.CLUB_INFO_TABLE,
-      ProjectionExpression: 'id, team, city, state',
-      FilterExpression: 'state = :p_state',
+      ProjectionExpression: 'id, team, city, #pstate',
+      FilterExpression: '#pstate = :p_state',
+      ExpressionAttributeNames: {
+        '#pstate': 'state',
+      },
       ExpressionAttributeValues: {
         ':p_state': this.userProvidedState,
       },
