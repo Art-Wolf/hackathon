@@ -14,7 +14,7 @@ export default class ClubInfoHandler {
     if (!this.userProvidedState) return this.promptForState();
 
     // Lets get all the clubs and states
-    this.getClubInfo();
+    return this.getClubInfo();
 
   }
 
@@ -36,7 +36,7 @@ export default class ClubInfoHandler {
       },
     };
 
-    this.docClient.scan(params, this.onScan);
+    return this.docClient.scan(params, this.onScan);
   }
 
   onScan(err, data) {
