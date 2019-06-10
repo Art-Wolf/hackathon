@@ -4,7 +4,7 @@ This Alexa skill demonstrates a way to connect new fans to their national team b
 
 This demo will only consist of information regarding the US Woman's national soccer team.
 
-Each player on the team plays for a club that is associated with the  US's National Women's Soccer League. This league contains 9 teams, and so we want users to learn which players play for the nearest club. 
+Each player on the team plays for a club that is associated with the  US's National Women's Soccer League. This league contains 9 teams, and so we want users to learn which players play for the nearest club.
 
 
 # Design
@@ -23,6 +23,4 @@ To automate the retrieval of additional information not maintained by FIFA, we s
 
 The AWS Lambda is not skill id locked, this allows testers to setup a private Alexa skill, build a model with the provided interaction model, and call the lambda via the testing tab.
 
-### Create a Skill
-
-
+(Testing Instructions)[./Alexa_Setup.md]

@@ -3,4 +3,4 @@ In order to particiate to the Hackathon please fork this repo and follow the rul
 
 
 # Demo
-[Get To Know Your Team](Get_To_Know_Your_Team.md)
+[Get To Know Your Team](docs/Get_To_Know_Your_Team.md)
