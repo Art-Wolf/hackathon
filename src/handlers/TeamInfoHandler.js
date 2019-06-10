@@ -28,10 +28,12 @@ export default class FifaRefHandler {
   getPlayerInfo () {
     var params = {
       TableName: process.env.SOCCER_TEAM_TABLE,
-      ProjectionExpression: 'id, team, number, #fn, lastName',
+      ProjectionExpression: 'id, team, #pn, #pfn, #pln',
       FilterExpression: '#fn = :p_name',
       ExpressionAttributeNames: {
-        '#fn': 'firstName',
+        '#pfn': 'firstName',
+        '#pln': 'lastName',
+        '#pn': 'number',
       },
       ExpressionAttributeValues: {
         ':p_name': this.userProvidedName,
