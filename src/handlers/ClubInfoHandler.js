@@ -3,40 +3,39 @@ var AWS = require ('aws-sdk');
 // Set the region
 AWS.config.update ({region: 'us-west-2'});
 
-export default class FifaRefHandler {
+// Load the Google Distance Matrix API
+var distance = require ('google-distance');
+
+export default class ClubInfoHandler {
   constructor (alexa) {
     this.alexa = alexa;
-    this.userProvidedName = this.alexa.event.request.intent.slots.name.value;
+    this.userProvidedState = this.alexa.event.request.intent.slots.state.value;
     this.docClient = new AWS.DynamoDB.DocumentClient ();
   }
 
   respond () {
-    if (!this.userProvidedName) return this.promptForName ();
+    if (!this.userProvidedState) return this.promptForState ();
 
-    // Lets search for that player..
-    this.getPlayerInfo ();
+    // Lets get all the clubs and states
+    this.getClubInfo ();
 
-    const say = `I do bid you a good day ${this.userProvidedName}`;
+    const say = `I do bid you a good day ${this.userProvidedState}`;
     this.alexa.emit (':tell', say);
   }
 
-  promptForName () {
-    const say = 'Sure, which player would you like to learn about?';
-    this.alexa.emit (':elicitSlot', 'name', say);
+  promptForState () {
+    const say = 'No problem, what state do you live in?';
+    this.alexa.emit (':elicitSlot', 'state', say);
   }
 
-  getPlayerInfo () {
+  getClubInfo () {
     var params = {
-      TableName: process.env.SOCCER_TEAM_TABLE,
-      ProjectionExpression: 'id, team, #pn, #pfn, #pln',
-      FilterExpression: '#pfn = :p_name',
+      TableName: process.env.CLUB_INFO_TABLE,
+      ProjectionExpression: 'id, team, city, state',
       ExpressionAttributeNames: {
         '#pfn': 'firstName',
         '#pln': 'lastName',
         '#pn': 'number',
-      },
-      ExpressionAttributeValues: {
-        ':p_name': this.userProvidedName,
       },
     };
 
@@ -52,13 +51,23 @@ export default class FifaRefHandler {
     } else {
       // print all the info
       console.log ('Scan succeeded.');
-      data.Items.forEach (function (player) {
+      data.Items.forEach (function (club) {
         console.log (
-          player.id + ': ',
-          player.firstName + ' ',
-          player.lastName + ' [',
-          player.number + '] - ',
-          player.team
+          club.id + ': ',
+          club.team + ' - ',
+          club.city + ', ',
+          club.state
+        );
+
+        distance.get (
+          {
+            origin: this.userProvidedState,
+            destination: club.city + ', ' + club.state,
+          },
+          function (err, data) {
+            if (err) return console.log (err);
+            console.log (data);
+          }
         );
       });
 

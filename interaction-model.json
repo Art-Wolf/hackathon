@@ -53,6 +53,25 @@
                         "look up {name}",
                         "look up"
                     ]
+                },
+                {
+                    "name": "ClubInfoIntent",
+                    "slots": [
+                        {
+                            "name": "state",
+                            "type": "AMAZON.US_STATE",
+                            "samples": [
+                                "{state}",
+                                "it is {state}",
+                                "I live in {state}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "which is my team",
+                        "where is my local team",
+                        "who is my local team"
+                    ]
                 }
             ],
             "types": []
@@ -83,6 +102,22 @@
                         {
                             "name": "name",
                             "type": "AMAZON.US_FIRST_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.39350824083.72275146863"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ClubInfoIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "name",
+                            "type": "AMAZON.US_STATE",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
                             "prompts": {
