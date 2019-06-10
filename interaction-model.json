@@ -116,7 +116,7 @@
                     "prompts": {},
                     "slots": [
                         {
-                            "name": "name",
+                            "name": "state",
                             "type": "AMAZON.US_STATE",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
