@@ -29,7 +29,7 @@ export default class FifaRefHandler {
     var params = {
       TableName: process.env.SOCCER_TEAM_TABLE,
       ProjectionExpression: 'id, team, #pn, #pfn, #pln',
-      FilterExpression: '#fn = :p_name',
+      FilterExpression: '#pfn = :p_name',
       ExpressionAttributeNames: {
         '#pfn': 'firstName',
         '#pln': 'lastName',
