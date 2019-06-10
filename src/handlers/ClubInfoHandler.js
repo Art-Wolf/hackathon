@@ -48,20 +48,16 @@ export default class ClubInfoHandler {
         var dataFound = false;
         var teamList = "";
         data.Items.forEach(function (club) {
-          teamList += club.team + ' is from ' + club.state + '.';
-
           dataFound = true;
-          if (club.state == this.userProvidedState) {
-            console.log('Team found: ' + club.team);
-            const say = `Congrats! Your team is the ${club.team}`;
-            this.alexa.emit(':tell', say);
-          }
+          console.log('Team found: ' + club.team);
+          const say = `Congrats! Your team is the ${club.team}`;
+          this.alexa.emit(':tell', say);
         });
 
         if (!dataFound) {
           console.log('Team not found');
-          const say = `I'm afraid you don't live in a state with a team. This is the list of teams: ${teamList}`;
-          this.alexa.emit(':ask', say);
+          const say = `I'm afraid you don't live in a state with a team.`;
+          this.alexa.emit(':tell', say);
         }
       }
     });
