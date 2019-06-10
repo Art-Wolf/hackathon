@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "fifa ref",
+            "invocationName": "fifa hack",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -34,6 +34,25 @@
                         "say {name}",
                         "Say my name"
                     ]
+                },
+                {
+                    "name": "TeamInfoIntent",
+                    "slots": [
+                        {
+                            "name": "name",
+                            "type": "AMAZON.US_FIRST_NAME",
+                            "samples": [
+                                "{name}",
+                                "it is {name}",
+                                "her name is {name}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "search for {name}",
+                        "look up {name}",
+                        "look up"
+                    ]
                 }
             ],
             "types": []
@@ -42,6 +61,22 @@
             "intents": [
                 {
                     "name": "FifaRefIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "name",
+                            "type": "AMAZON.US_FIRST_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.39350824083.72275146863"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "TeamInfoIntent",
                     "confirmationRequired": false,
                     "prompts": {},
                     "slots": [
