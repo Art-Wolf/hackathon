@@ -52,12 +52,14 @@ export default class ClubInfoHandler {
       data.Items.forEach(function (club) {
         dataFound = true;
         if (club.state == this.userProvidedState) {
+          console.log('Team found: ' + club.team);
           const say = `Congrats! You're team is the ${club.team}`;
           this.alexa.emit(':tell', say);
         }
       });
 
       if (!dataFound) {
+        console.log('Team not found');
         const say = `I'm afraid you don't live in a state with a team. Do you here the list of teams?`;
         this.alexa.emit(':ask', say);
       }
