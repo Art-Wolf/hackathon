@@ -38,7 +38,7 @@ export default class FifaRefHandler {
       },
     };
 
-    this.docClient.scan (params, onScan);
+    this.docClient.scan (params, this.onScan);
   }
 
   onScan (err, data) {
