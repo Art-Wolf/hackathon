@@ -16,26 +16,6 @@
                     "samples": []
                 },
                 {
-                    "name": "FifaRefIntent",
-                    "slots": [
-                        {
-                            "name": "name",
-                            "type": "AMAZON.US_FIRST_NAME",
-                            "samples": [
-                                "{name}",
-                                "it is {name}",
-                                "my name is {name}",
-                                "my first name is {name}"
-                            ]
-                        }
-                    ],
-                    "samples": [
-                        "say my name {name}",
-                        "say {name}",
-                        "Say my name"
-                    ]
-                },
-                {
                     "name": "TeamInfoIntent",
                     "slots": [
                         {
@@ -78,22 +58,6 @@
         },
         "dialog": {
             "intents": [
-                {
-                    "name": "FifaRefIntent",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
-                        {
-                            "name": "name",
-                            "type": "AMAZON.US_FIRST_NAME",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Slot.39350824083.72275146863"
-                            }
-                        }
-                    ]
-                },
                 {
                     "name": "TeamInfoIntent",
                     "confirmationRequired": false,
