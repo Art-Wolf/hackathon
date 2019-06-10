@@ -46,18 +46,21 @@ export default class ClubInfoHandler {
         // print all the info
         console.log('Scan succeeded.');
         var dataFound = false;
+        var teamList = "";
         data.Items.forEach(function (club) {
+          teamList += club.team + ' is from ' + club.state + '.';
+
           dataFound = true;
           if (club.state == this.userProvidedState) {
             console.log('Team found: ' + club.team);
-            const say = `Congrats! You're team is the ${club.team}`;
+            const say = `Congrats! Your team is the ${club.team}`;
             this.alexa.emit(':tell', say);
           }
         });
 
         if (!dataFound) {
           console.log('Team not found');
-          const say = `I'm afraid you don't live in a state with a team. Do you here the list of teams?`;
+          const say = `I'm afraid you don't live in a state with a team. This is the list of teams: ${teamList}`;
           this.alexa.emit(':ask', say);
         }
       }
