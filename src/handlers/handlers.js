@@ -6,7 +6,7 @@ const handlers = {
     const fifaRefHandler = new FifaRefHandler (this);
     return fifaRefHandler.respond ();
   },
-  TeamInfoHandler () {
+  TeamInfoIntent () {
     const teamInfoHandler = new TeamInfoHandler (this);
     return teamInfoHandler.respond ();
   },
