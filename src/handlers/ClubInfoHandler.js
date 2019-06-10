@@ -4,7 +4,7 @@ var AWS = require ('aws-sdk');
 AWS.config.update ({region: 'us-west-2'});
 
 // Load the Google Distance Matrix API
-var distance = require ('google-distance');
+//var distance = require ('google-distance');
 
 export default class ClubInfoHandler {
   constructor (alexa) {
@@ -59,16 +59,16 @@ export default class ClubInfoHandler {
           club.state
         );
 
-        distance.get (
-          {
-            origin: this.userProvidedState,
-            destination: club.city + ', ' + club.state,
-          },
-          function (err, data) {
-            if (err) return console.log (err);
-            console.log (data);
-          }
-        );
+        //distance.get (
+        //  {
+        //    origin: this.userProvidedState,
+        //    destination: club.city + ', ' + club.state,
+        //  },
+        //  function (err, data) {
+        //    if (err) return console.log (err);
+        //    console.log (data);
+        //  }
+        //);
       });
 
       // continue scanning if we have more players, because
