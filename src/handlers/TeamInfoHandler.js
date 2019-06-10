@@ -48,7 +48,7 @@ export default class FifaRefHandler {
         console.log('Scan succeeded.');
 
 
-        data.Items.forEach(function (player) {
+        data.Items.forEach(player => {
           const say = player.firstName + ' ' +
             player.lastName + ' plays as ' +
             player.number + ' for Team USA. Her local team is ' +

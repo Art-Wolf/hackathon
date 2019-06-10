@@ -47,7 +47,7 @@ export default class ClubInfoHandler {
         console.log('Scan succeeded.');
         var dataFound = false;
         var teamList = "";
-        data.Items.forEach(function (club) {
+        data.Items.forEach(club => {
           dataFound = true;
           console.log('Team found: ' + club.team);
           const say = `Congrats! Your team is the ${club.team}`;
